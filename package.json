@@ -1,0 +1,10 @@
+{
+  "name": "OneSearchBox",
+  "description": "One SearchBox to rule them all, One SearchBox to find them, One SearchBox to bring them all and in the FilterTagCloud bind them",
+  "version": "0.0.1",
+  "author": "Pablo Novas @pjnovas",
+  "dependencies": {
+    "jQuery": ">= 1.7.2",
+    "jQueryUI": ">= 1.8.20"
+  }
+}
