@@ -2,7 +2,7 @@
 function initPlugin(servicios, clientes, usuarios){
 	$("#searchBox").onesearchbox({
 		allLabel: "Todos",
-		tags: "",
+		tags: "#tags",
 		categories: [{
 			name: "Servicios",
 			color: "#B6D64F",
@@ -32,25 +32,7 @@ function initPlugin(servicios, clientes, usuarios){
 }
 
 $(document).ready(function(){
-    
     getData();
-    
-    $("a.close", "#tags").live('click', function(){
-        $(this).parents('li').remove();
-    });
-    
-    $("li", "#tags").live('mouseenter', function(){
-        var lis = $(this).parents('ul').children('li');
-        var cl = $(this).attr('class');
-        lis.not('.' + cl).stop(true).animate({opacity: 0.2},500);
-    });
-    
-    $("li", "#tags").live('mouseleave', function(){
-        var lis = $(this).parents('ul').children('li');
-        var cl = $(this).attr('class');
-        lis.not('.' + cl).stop(true).animate({opacity: 1},500);
-    });
-    
 });
 
 function getData(){
@@ -72,3 +54,4 @@ function getData(){
         usuarioDef.resolve(_usuarios);
     });
 }
+

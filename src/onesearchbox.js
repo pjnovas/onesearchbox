@@ -1,3 +1,4 @@
+
 $.widget( "custom.autocompleteOSB", $.ui.autocomplete, {
   _renderMenu: function( ul, items ) {
       var self = this,
@@ -35,6 +36,7 @@ $.widget( "custom.autocompleteOSB", $.ui.autocomplete, {
     init: function(options) {
     	var defaults = {
     		allLabel: "All",
+    		tags: "",
     		categories: []
     	};
     	
@@ -43,7 +45,7 @@ $.widget( "custom.autocompleteOSB", $.ui.autocomplete, {
       return this.each(function(){
         var $this = $(this),
             self = $this,
-            data = $this.data('onesearchbox'); 
+            data = $this.data('onesearchbox')
   
         if(!data){
           
@@ -52,83 +54,147 @@ $.widget( "custom.autocompleteOSB", $.ui.autocomplete, {
             options : settings
           });
          	
+         	data = $this.data('onesearchbox');
+         	
+         	var lists = [];
          	var categoriesSel = $("<select>").insertAfter($this);
-					categoriesSel.append("<option value='" + settings.allLabel + "'>" + settings.allLabel + "</option>");
-					
-					var cats = settings.categories;
-					var lists = [];
-					lists[settings.allLabel]= [];
-					for (var i=0; i< cats.length; i++){
-						var cName = cats[i].name;
+         	data.options.selection = [];
+         	
+         	function buildCategories(){
+         		
+						categoriesSel.append("<option value='" + data.options.allLabel + "'>" + data.options.allLabel + "</option>");
 						
-						for(var j=0; j<cats[i].items.length; j++){
-							var item = cats[i].items[j]; 
-							item.category = cName;
-							if(cats[i].fields){
-								item.id = item[cats[i].fields.id] || item.id;
-								item.label = item[cats[i].fields.label] || item.label;
-								item.color = cats[i].color;
+						var cats = data.options.categories;
+						lists[data.options.allLabel]= [];
+						for (var i=0; i< cats.length; i++){
+							var cName = cats[i].name;
+							
+							for(var j=0; j<cats[i].items.length; j++){
+								var item = cats[i].items[j]; 
+								item.category = cName;
+								if(cats[i].fields){
+									item.id = item[cats[i].fields.id] || item.id;
+									item.label = item[cats[i].fields.label] || item.label;
+									item.color = cats[i].color;
+								}
 							}
+							
+							lists[cName] = cats[i].items;
+							
+							categoriesSel.append("<option value='" + cName + "'>" + cName + "</option>");
+							lists[data.options.allLabel] = lists[data.options.allLabel].concat(lists[cName]);
 						}
-						
-						lists[cName] = cats[i].items;
-						
-						categoriesSel.append("<option value='" + cName + "'>" + cName + "</option>");
-						lists[settings.allLabel] = lists[settings.allLabel].concat(lists[cName]);
 					}
 					
-										
-         	$this.autocompleteOSB({
-				    delay: 0,
-				    source: lists[settings.allLabel],
-				    open: function(event, ui){
-				    	var newWidth = $this.width() + $('.ui-combobox').width();
-				    	var ul = $($this.autocompleteOSB("widget")[0]);
-				    	
-				    	ul.width(newWidth - 10);
-				    	$('li .label').width($this.width()-10);
-				    },
-				    select: function( event, ui ) {
-				      var tag = $("<li>" + ui.item.label + "<a href='#' class='close'>x</a></li>")
-				      .addClass(ui.item.category);
-				          
-				      $("#tags").append(tag);
-				      $("#searchBox").val("");
-				      return false;
-				    }
-				  }).attr('class', 'ui-state-default ui-autocomplete-input ui-widget ui-widget-content ui-corner-left');
-         	
-					categoriesSel.combobox({
-				    selected: function (e){
-				      $this.autocompleteOSB("option" , "source" , lists[categoriesSel.val()]);
-				    },
-				    opened: function( event, ui ) {
-							$('li', ui).each(function(){
-								if ($(this).text() != settings.allLabel){
-								  var cat = lists[$(this).text()];
-								  if (cat) $('a', this).css('color', cat[0].color || '');
-							  }
-							});
-		        }
-				  })
-				  .change(function(e){
-				    $this.autocompleteOSB("option" , "source" , lists[categoriesSel.val()]);
-				  })
-				  .next('span.ui-combobox').find('input').attr('readonly', 'readonly').removeClass('ui-corner-left');
+					function buildAutocomplete(){
+						
+						$this.autocompleteOSB({
+					    delay: 0,
+					    source: lists[data.options.allLabel],
+					    open: function(event, ui){
+					    	var newWidth = $this.width() + $('.ui-combobox').width();
+					    	var ul = $($this.autocompleteOSB("widget")[0]);
+					    	
+					    	ul.width(newWidth - 10);
+					    	$('li .label').width($this.width()-10);
+					    },
+					    select: function( event, ui ) {
+					    	var lis = $('li[data-id=' + ui.item.id + ']', $(data.options.tags));
+					    	if (lis.filter('.' + ui.item.category).length > 0)
+					    		return false;
+					    	
+					      var tag = $("<li>" + ui.item.label + "<a href='#' class='close'>x</a></li>")
+					      	.addClass(ui.item.category).css('border-color', ui.item.color)
+					      	.attr('data-id', ui.item.id);
+					      
+					      data.options.selection.push(ui.item);
+					      
+					      $(data.options.tags).append(tag);
+					      $("#searchBox").val("");
+					      return false;
+					    }
+					  }).attr('class', 'ui-state-default ui-autocomplete-input ui-widget ui-widget-content ui-corner-left');
+	         }
+	         
+	         function buildCombobox(){
+	         	
+						categoriesSel.combobox({
+					    selected: function (e){
+					      $this.autocompleteOSB("option" , "source" , lists[categoriesSel.val()]);
+					    },
+					    opened: function( event, ui ) {
+								$('li', ui).each(function(){
+									if ($(this).text() != data.options.allLabel){
+									  var cat = lists[$(this).text()];
+									  if (cat) $('a', this).css('color', cat[0].color || '');
+								  }
+								});
+			        }
+					  })
+					  .change(function(e){
+					    $this.autocompleteOSB("option" , "source" , lists[categoriesSel.val()]);
+					  })
+					  .next('span.ui-combobox').find('input').attr('readonly', 'readonly').removeClass('ui-corner-left');
+	        }
+	        
+	        function buildTagsContainer(){
+	        	
+						$("a.close", data.options.tags).live('click', function(){
+						    var idx,
+						    	ele = $(this).parents('li');
+						    	
+						    for(var i=0; i< data.options.selection.length; i++){
+						    	if(data.options.selection[i].id == ele.attr('data-id')) {
+						    		idx = i;
+						    		break;
+						    	}
+						    }
+						    
+						    data.options.selection.splice(idx, 1);
+						    $(this).parents('li').remove();
+						});
+						
+						function gotoOpacity(opa){
+							var lis = $(this).parents('ul').children('li');
+					    var cl = $(this).attr('class');
+					    lis.not('.' + cl).stop(true).animate({opacity: opa},500);
+						}
+						
+						if (!settings.tags){
+							data.options.tags = $("<ul></ul>");
+							data.options.tags.insertAfter($this);
+						}
+						
+						$(data.options.tags).addClass('onesearchBox-tags');
+						
+						$("li", data.options.tags).live('mouseenter', function(){
+					  	gotoOpacity.call(this, 0.2);
+						}).live('mouseleave', function(){
+					  	gotoOpacity.call(this, 1);
+						});
+					}
+					
+					buildCategories();
+					buildAutocomplete();
+					buildCombobox();
+					buildTagsContainer();
         }
       });
     },
-    sampleMethod: function(arguments) {
-      //Setup Variables
-      var settings = $.extend({}, settings, options ),
-          $this = $(this),
-          self = $this,
+    selection: function() {
+      var $this = $(this),
           data = $this.data('onesearchbox');
       
-      //Method Logic  
-      return this.each(function(){
-        
-      });
+			var categoriesOut = {};
+			var sel = data.options.selection;
+			for (var i=0; i<sel.length; i++){
+				catName = sel[i].category;
+				if (!categoriesOut[catName]) 
+					categoriesOut[catName] = [];
+				categoriesOut[catName].push(sel[i].id);
+			}
+			
+			return categoriesOut;
     }
   };
 
