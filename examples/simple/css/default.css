@@ -1,141 +1,65 @@
-
-.container {
-    width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
+.ui-widget .ui-widget {
+    font-size: 1em;
 }
 
-.searchBox-ctn {
+.ui-combobox {
 	position: relative;
+	display: inline-block;
 }
-
-/* OVERRRIDE jQuery UI
-********************************************/
-.ui-widget {
-    font-size: 1.0em;
+.ui-combobox-toggle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin-left: -1px;
+	padding: 0;
+	/* adjust styles for IE 6/7 */
+	*height: 1.7em;
+	*top: 0.1em;
 }
-.ui-combobox {
-    position: relative;
-    display: inline-block;
-    margin-right: 30px;
+.ui-combobox-input {
+	margin: 0;
+	padding: 0.3em;
 }
-.ui-combobox .ui-button {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin-left: -1px;
-    padding: 0;
-}
-
-.ui-autocomplete-input {
-    margin: 0;
-    padding: 0.3em;
-    width: 205px;
-}
-
-.ui-autocomplete {
-    height: 200px;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.ui-autocomplete-input, .searchBox-ctn{
-  width: 550px;
-}
-
-.ui-combobox {
-  position: absolute;
-  top: 0;
-  right: -1px;
-}   
 
 .ui-combobox input {
-  width: 150px;
+	padding-left: 5px;
+	margin-left: -1px;
 }
 
-#searchBox {
+.ui-combobox .ui-button .ui-button-text {
+	display: inline;
+}
+
+.ui-combobox .ui-button-icon-only {
+	width: 30px;
+	left: -3px;
+	top: 0;
+	height: 24px;
+}
+
+.ui-autocomplete-onesearchBox {
     
 }
 
-.ui-autocomplete-searchbox {
-    
+.ui-autocomplete-onesearchBox li {
+    /*border-bottom: solid 1px silver;*/
 }
 
-.ui-autocomplete-searchbox li {
-  /*border-bottom: solid 1px silver;*/
-}
-
-.ui-autocomplete-searchbox li a {
-  display:inline-block;
-  line-height: 2;
+.ui-autocomplete-onesearchBox li a {
+    display:inline-block;
+    line-height: 2;
 }
  
-.ui-autocomplete-searchbox li a .categoria {
-  display: inline-block;
-  width: 20%;
-  padding: 0 5px;
-  font-weight: bold;
+.ui-autocomplete-onesearchBox li a .category {
+    display: inline-block;
+    width: 20%;
+    padding: 0 5px;
+    font-weight: bold;
 }
 
-.ui-autocomplete-searchbox li a .etiqueta {
-  display: inline-block;
-  width: 70%;
-  float:left;
-  padding: 0 5px;
-}
-
-#tags {
-  width: 100%;
-  border: dashed 2px #DBDBDB;
-  list-style: none;
-  display: inline-block;
-  padding: 10px;
-  max-width: 1275px;
-  margin: 20px auto;
-  border-radius: 10px;
-}
-
-#tags li {
-  float:left;
-  margin: 5px;
-  border-style: solid;
-  border-width: 2px;
-  padding: 5px;
-  border-radius: 10px;
-  cursor: default;
-}
-
-.ui-autocomplete-searchbox li a .categoria.Servicios {
-  color: #44B833;
-}
-
-.ui-autocomplete-searchbox li a .categoria.Clientes {
-  color: #F0A13E;
-}
-
-.ui-autocomplete-searchbox li a .categoria.Usuarios {
-  color: #DD45F1;
-}
-
-#tags li.Servicios {
-  border-color: #8DE081;
-}
-
-#tags li.Clientes {
-  border-color: #FFC377;
-}
-
-#tags li.Usuarios {
-  border-color: #F5ABFF;  
-}
-
-#tags li a {
-  margin-left: 10px;
-  text-decoration: none;
-  color: #E97676;
-  padding: 1px 6px 2px 6px;
-  text-transform: lowercase;
-  font-weight: bold;
-  font-size: 16px;
-  border-left: solid 1px silver;
+.ui-autocomplete-onesearchBox li a .label {
+    display: inline-block;
+    width: 70%;
+    float:left;
+    padding: 0 5px;
 }

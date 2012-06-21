@@ -17,6 +17,9 @@
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
+						open: function(event, ui){
+							self._trigger( "opened", event, (input.autocomplete( "widget" ))[0]);
+						},
 						source: function( request, response ) {
 							var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
 							response( select.children( "option" ).map(function() {
