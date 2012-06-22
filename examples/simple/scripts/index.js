@@ -18,7 +18,8 @@ function initPlugin(servicios, clientes, usuarios){
 			fields: {
 				id: "id",
 				label: "nombre"
-			}
+			},
+			single: true
 		},{
 			name: "Usuarios",
 			color: "#C64FD6",
@@ -27,12 +28,37 @@ function initPlugin(servicios, clientes, usuarios){
 				id: "id",
 				label: "apellido"
 			}
-		}]
+		}],
+		added: function(category, id){
+			if (category === "Clientes") {
+		 		$("#searchBox")
+		 			.onesearchbox("clear", ["Servicios"])
+		 			.onesearchbox("rebind", {
+						name: "Servicios",
+						items: [servicios[0], servicios[1]]
+					});
+		 	}
+		},
+		removed: function(category){
+			if (category === "Clientes") {
+		 		$("#searchBox")
+		 			.onesearchbox("clear", ["Servicios"])
+		 			.onesearchbox("rebind", {
+						name: "Servicios",
+						items: servicios
+					});
+		 	}
+		}
   });
 }
 
 $(document).ready(function(){
     getData();
+    
+    $("#showSelections").click(function(){
+    	 var categoriesSelected = $("#searchBox").onesearchbox("selection");
+    	 console.dir(categoriesSelected);
+    });
 });
 
 function getData(){
