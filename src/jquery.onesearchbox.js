@@ -168,6 +168,7 @@
 						    var cat = data.options.selection[idx].category;
 						    
 						    data.options.selection.splice(idx, 1);
+						    gotoOpacity.call(this, 1);
 						    $(this).parents('li').remove();
 						    
   							if (data.options.removed)
