@@ -78,6 +78,7 @@
       var settings = $.extend({}, defaults, options);
 
       return this.each(function(){
+      	console.log(this);
         var $this = $(this),
             self = $this,
             data = $this.data('onesearchbox')
